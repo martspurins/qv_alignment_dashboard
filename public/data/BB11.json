@@ -1,0 +1,226 @@
+{
+  "fmName": "FM6",
+  "bbName": "BB11",
+  "QV1": {
+    "Flotron 90° — Alignment": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Flotron 87.5° — Baseline": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Flotron 272.5° — Baseline": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 272.5° — Initial Install": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 87.5° — PLM Installed": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 87.5° — PLM Preload": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 87.5° — HDRM Preload (Pre-Vibe)": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 87.5° — Post Vibe": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    }
+  },
+  "QV2": {
+    "Flotron 90° — Alignment": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Flotron 87.5° — Baseline": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Flotron 272.5° — Baseline": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 272.5° — Initial Install": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 87.5° — PLM Installed": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 87.5° — PLM Preload": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 87.5° — HDRM Preload (Pre-Vibe)": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 87.5° — Post Vibe": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    }
+  },
+  "QV3": {
+    "Flotron 90° — Alignment": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Flotron 87.5° — Baseline": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Flotron 272.5° — Baseline": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 272.5° — Initial Install": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 87.5° — PLM Installed": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 87.5° — PLM Preload": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 87.5° — HDRM Preload (Pre-Vibe)": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    },
+    "Structure 87.5° — Post Vibe": {
+      "dx": null,
+      "dy": null,
+      "dz": null,
+      "rot_deg": null,
+      "mag": null,
+      "rf": {},
+      "deviations": []
+    }
+  }
+}
