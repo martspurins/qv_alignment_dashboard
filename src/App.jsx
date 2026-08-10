@@ -152,9 +152,9 @@ function computeAlignment(pts, linearGain=1.0) {
 
   // ── Linear stage values: signed average of the local-frame Feed Position Error ──
   // (found to be a more accurate alignment reference than the matrix-derived actuator solve)
-  const A1 = -(d1[0]+d2[0]+d4[0])/3;
-  const A2 = -(d1[1]+d2[1]+d4[1])/3;
-  const A3 = -(d1[2]+d2[2]+d4[2])/3;
+  const A1 = (d1[0]+d2[0]+d4[0])/3;
+  const A2 = (d1[1]+d2[1]+d4[1])/3;
+  const A3 = (d1[2]+d2[2]+d4[2])/3;
 
   const rotConverged = Math.abs(A4)<0.05 && Math.abs(A5)<0.05 && Math.abs(A6)<0.05;
   const linearConverged = Math.abs(A1)<0.1 && Math.abs(A2)<0.1 && Math.abs(A3)<0.1;
@@ -162,7 +162,20 @@ function computeAlignment(pts, linearGain=1.0) {
   const dX = Math.max(Math.abs(d1[0]), Math.abs(d2[0]), Math.abs(d4[0]));
   const dY = Math.max(Math.abs(d1[1]), Math.abs(d2[1]), Math.abs(d4[1]));
   const dZ = Math.max(Math.abs(d1[2]), Math.abs(d2[2]), Math.abs(d4[2]));
-  const dRot = Math.sqrt(Th_X*Th_X+Th_Y*Th_Y+Th_Z*Th_Z) * 180/Math.PI;
+  // ── Feed rotation: angle between nominal and measured F2→F4 baseline vectors ──
+  // (matches SENER Excel calculator's "Total feed rotation" — the small-angle
+  // 6-DOF fit used previously did not match the SENER reference value.)
+  function rotateLocal(pt) { return mv(Rf, pt); }
+  const nom2_l = rotateLocal(nom2), nom4_l = rotateLocal(nom4);
+  const p2_l = rotateLocal(p2), p4_l = rotateLocal(p4);
+  const nomVec = [nom2_l[0]-nom4_l[0], nom2_l[1]-nom4_l[1], nom2_l[2]-nom4_l[2]];
+  const measVec = [p2_l[0]-p4_l[0], p2_l[1]-p4_l[1], p2_l[2]-p4_l[2]];
+  const vnorm = v => Math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);
+  const vunit = v => { const n = vnorm(v); return [v[0]/n, v[1]/n, v[2]/n]; };
+  const vdot = (a,b) => a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+  const nNom = vunit(nomVec), nMeas = vunit(measVec);
+  const cosRot = Math.max(-1, Math.min(1, vdot(nNom, nMeas)));
+  const dRot = Math.acos(cosRot) * 180/Math.PI;
 
   const coordErrors = [
     {pt:'P1', ex:+d1[0].toFixed(4), ey:+d1[1].toFixed(4), ez:+d1[2].toFixed(4)},
