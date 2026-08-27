@@ -150,11 +150,15 @@ function computeAlignment(pts, linearGain=1.0) {
   const d2 = feedDevLocal(p2, nom2);
   const d4 = feedDevLocal(p4, nom4);
 
-  // ── Linear stage values: signed average of the local-frame Feed Position Error ──
-  // (found to be a more accurate alignment reference than the matrix-derived actuator solve)
-  const A1 = (d1[0]+d2[0]+d4[0])/3;
-  const A2 = (d1[1]+d2[1]+d4[1])/3;
-  const A3 = (d1[2]+d2[2]+d4[2])/3;
+  // ── Linear stage values: inverse of the signed average local-frame FPE ──
+  // (found to be a more accurate alignment reference than the matrix-derived
+  // actuator solve). Inverted because these represent the amount + direction
+  // the linear actuators must move to correct the measured error — the
+  // opposite direction of the error itself. Computed from the signed d1/d2/d4
+  // BEFORE dX/dY/dZ below take the absolute value for FPE display.
+  const A1 = -(d1[0]+d2[0]+d4[0])/3;
+  const A2 = -(d1[1]+d2[1]+d4[1])/3;
+  const A3 = -(d1[2]+d2[2]+d4[2])/3;
 
   const rotConverged = Math.abs(A4)<0.05 && Math.abs(A5)<0.05 && Math.abs(A6)<0.05;
   const linearConverged = Math.abs(A1)<0.1 && Math.abs(A2)<0.1 && Math.abs(A3)<0.1;
@@ -189,11 +193,18 @@ function computeAlignment(pts, linearGain=1.0) {
 
   const fmt = v => v>=0 ? `+${Math.abs(v).toFixed(3)}` : `-${Math.abs(v).toFixed(3)}`;
   const rotTxt = `1PR${fmt(A4)}\n1WS\n2PR${fmt(A5)}\n2WS\n3PR${fmt(A6)}`;
-  const linTxt = `1PR${fmt(A1)}\n1WS\n2PR${fmt(A2)}\n2WS\n3PR${fmt(A3)}`;
+  // Axis 2 / Axis 3 swapped here to match the linear alignment tool's actual axis
+  // numbering, so the technician can copy these down in tool order.
+  const linTxt = `1PR${fmt(A1)}\n1WS\n2PR${fmt(A3)}\n2WS\n3PR${fmt(A2)}`;
 
   return {
     rotations: {A4:+A4.toFixed(4), A5:+A5.toFixed(4), A6:+A6.toFixed(4)},
     linear:    {A1:+A1.toFixed(4), A2:+A2.toFixed(4), A3:+A3.toFixed(4)},
+    // Display-ready, tool-order axis lists for the AxisBlock cards:
+    // rotational stage axes 1/2/3 map straight to A4/A5/A6 (no swap needed);
+    // linear stage axes 2/3 are swapped vs. A1/A2/A3 to match the tool's numbering.
+    rotationAxes: [["Axis 1", A4], ["Axis 2", A5], ["Axis 3", A6]],
+    linearAxes: [["Axis 1", A1], ["Axis 2", A3], ["Axis 3", A2]],
     coordErrors, deltaXYZ, rotConverged, linearConverged,
     rotTxt, linTxt, linearGain,
   };
@@ -377,7 +388,7 @@ function AlignmentPanel(){
       </div>
       <div style={{fontFamily:"monospace",fontSize:12,background:"#070b14",borderRadius:8,padding:10,whiteSpace:"pre",color:C.text,lineHeight:1.8}}>{txt}</div>
       <div style={{display:"flex",gap:6,marginTop:10}}>
-        {Object.entries(axes).map(([k,v])=>{
+        {axes.map(([k,v])=>{
           const c=Math.abs(v)>0.5?C.danger:Math.abs(v)>0.1?C.warn:C.good;
           return <div key={k} style={{flex:1,background:"#070b14",borderRadius:8,padding:"8px 10px",textAlign:"center"}}>
             <div style={{fontSize:9,color:C.muted,marginBottom:2}}>{k}</div>
@@ -410,8 +421,8 @@ function AlignmentPanel(){
         ))}
       </div>
       <div style={{display:"flex",gap:12,marginBottom:14,flexWrap:"wrap"}}>
-        <AxisBlock label="ROTATION PLATFORM (apply first)" axes={result.rotations} txt={result.rotTxt} copyKey="rot" converged={result.rotConverged} color="#6366f1"/>
-        <AxisBlock label="LINEAR STAGE (after re-measurement)" axes={result.linear} txt={result.linTxt} copyKey="lin" converged={result.linearConverged} color={C.accent}/>
+        <AxisBlock label="ROTATIONAL STAGE (apply first)" axes={result.rotationAxes} txt={result.rotTxt} copyKey="rot" converged={result.rotConverged} color="#6366f1"/>
+        <AxisBlock label="LINEAR STAGE (after re-measurement)" axes={result.linearAxes} txt={result.linTxt} copyKey="lin" converged={result.linearConverged} color={C.accent}/>
       </div>
       <div style={{background:C.surface,border:`1px solid ${C.border}`,borderRadius:12,padding:14,marginBottom:14}}>
         <div style={{fontSize:11,fontWeight:600,color:C.muted,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:10}}>Feed position errors in Az Bracket frame (nominal − measured)</div>
@@ -871,7 +882,7 @@ function AlignmentSection({allData, setExtraData}) {
       </div>
       <div style={{fontFamily:"monospace",fontSize:12,background:"#070b14",borderRadius:8,padding:10,whiteSpace:"pre",color:C.text}}>{txt}</div>
       <div style={{display:"flex",gap:6,marginTop:10}}>
-        {Object.entries(axes).map(([k,v])=>{
+        {axes.map(([k,v])=>{
           const c=Math.abs(v)>0.5?C.danger:Math.abs(v)>0.1?C.warn:C.good;
           return <div key={k} style={{flex:1,background:"#070b14",borderRadius:8,padding:"8px 10px",textAlign:"center"}}>
             <div style={{fontSize:9,color:C.muted,marginBottom:2}}>{k}</div>
@@ -988,8 +999,8 @@ function AlignmentSection({allData, setExtraData}) {
       {/* Results */}
       {result&&<>
         <div style={{display:"flex",gap:12,marginBottom:14,flexWrap:"wrap"}}>
-          <AxisBlock label="① ROTATION PLATFORM — Apply first" axes={result.rotations} txt={result.rotTxt} copyKey="rot" converged={result.rotConverged} color="#6366f1"/>
-          <AxisBlock label="② LINEAR STAGE — After re-measurement" axes={result.linear} txt={result.linTxt} copyKey="lin" converged={result.linearConverged} color={C.accent}/>
+          <AxisBlock label="① ROTATIONAL STAGE — Apply first" axes={result.rotationAxes} txt={result.rotTxt} copyKey="rot" converged={result.rotConverged} color="#6366f1"/>
+          <AxisBlock label="② LINEAR STAGE — After re-measurement" axes={result.linearAxes} txt={result.linTxt} copyKey="lin" converged={result.linearConverged} color={C.accent}/>
         </div>
 
         {/* Feed position error */}
